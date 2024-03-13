@@ -1,32 +1,43 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
 import java.sql.*;
+import java.util.Properties;
 
 public class Main {
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/mydatabase";
-    private static final String USER = "myuser";
-    private static final String PASSWORD = "secret";
-    private static final String SQL_FILE_PATH = "src/main/resources/sql/";
-
     public static void main(String[] args) {
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
-            Class.forName("org.postgresql.Driver");
+        Properties properties = new Properties();
+        try (FileInputStream input = new FileInputStream("src/main/resources/configuration.properties")) {
+            properties.load(input);
 
-            executeScript(connection, "init_tables.sql");
-            executeScripts(connection, "code1.sql", "code2.sql", "code4.sql", "code5.sql", "code7.sql", "code8.sql");
+            String url = properties.getProperty("POSTGRES_URL");
+            String user = properties.getProperty("POSTGRES_USER");
+            String password = properties.getProperty("POSTGRES_PASSWORD");
+            String sqlFilePath = properties.getProperty("SQL_FILE_PATH");
 
-            System.out.println("Data insertion completed successfully.");
+            try (Connection connection = DriverManager.getConnection(url, user, password)) {
+                Class.forName("org.postgresql.Driver");
 
-        } catch (Exception e) {
-            System.err.println("Error executing SQL script: " + e.getMessage());
+                executeScript(connection, sqlFilePath + "init_tables.sql");
+                executeScripts(connection, sqlFilePath,
+                        "code1.sql", "code2.sql", "code4.sql", "code5.sql", "code7.sql", "code8.sql");
+
+                System.out.println("Data insertion completed successfully.");
+
+            } catch (Exception e) {
+                System.err.println("Error executing SQL script: " + e.getMessage());
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading properties file: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    private static void executeScript(Connection connection, String fileName) throws SQLException {
-        String filePath = SQL_FILE_PATH + fileName;
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+    private static void executeScript(Connection connection, String filePath) throws SQLException {
+        try (Statement statement = connection.createStatement();
+             FileInputStream input = new FileInputStream(filePath);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(input))) {
+
             StringBuilder stringBuilder = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
@@ -35,11 +46,9 @@ public class Main {
             }
             String[] sqlStatements = stringBuilder.toString().split(";");
 
-            try (Statement statement = connection.createStatement()) {
-                for (String sql : sqlStatements) {
-                    if (!sql.trim().isEmpty()) {
-                        statement.execute(sql);
-                    }
+            for (String sql : sqlStatements) {
+                if (!sql.trim().isEmpty()) {
+                    statement.execute(sql);
                 }
             }
         } catch (Exception e) {
@@ -47,10 +56,9 @@ public class Main {
         }
     }
 
-    private static void executeScripts(Connection connection, String... fileNames) throws SQLException {
+    private static void executeScripts(Connection connection, String sqlFilePath, String... fileNames) throws SQLException {
         for (String fileName : fileNames) {
-            executeScript(connection, fileName);
+            executeScript(connection, sqlFilePath + fileName);
         }
     }
-
 }
