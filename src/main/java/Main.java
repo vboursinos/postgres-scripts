@@ -1,13 +1,17 @@
-import java.io.*;
-import java.sql.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 public class Main {
 
     public static void main(String[] args) {
-        Properties properties = new Properties();
-        try (FileInputStream input = new FileInputStream("src/main/resources/configuration.properties")) {
-            properties.load(input);
+        try {
+            Properties properties = loadProperties("src/main/resources/configuration.properties");
 
             String url = properties.getProperty("POSTGRES_URL");
             String user = properties.getProperty("POSTGRES_USER");
@@ -22,21 +26,24 @@ public class Main {
                         "code1.sql", "code2.sql", "code4.sql", "code5.sql", "code7.sql", "code8.sql");
 
                 System.out.println("Data insertion completed successfully.");
-
-            } catch (Exception e) {
-                System.err.println("Error executing SQL script: " + e.getMessage());
-                e.printStackTrace();
             }
-        } catch (IOException e) {
-            System.err.println("Error reading properties file: " + e.getMessage());
+        } catch (IOException | SQLException | ClassNotFoundException e) {
+            System.err.println("Error: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    private static Properties loadProperties(String filePath) throws IOException {
+        try (FileReader fileReader = new FileReader(filePath)) {
+            Properties properties = new Properties();
+            properties.load(fileReader);
+            return properties;
         }
     }
 
     private static void executeScript(Connection connection, String filePath) throws SQLException {
         try (Statement statement = connection.createStatement();
-             FileInputStream input = new FileInputStream(filePath);
-             BufferedReader reader = new BufferedReader(new InputStreamReader(input))) {
+             BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 
             StringBuilder stringBuilder = new StringBuilder();
             String line;
@@ -51,8 +58,8 @@ public class Main {
                     statement.execute(sql);
                 }
             }
-        } catch (Exception e) {
-            throw new SQLException("Error executing SQL script: " + e.getMessage());
+        } catch (IOException e) {
+            throw new SQLException("Error reading SQL script: " + e.getMessage());
         }
     }
 
