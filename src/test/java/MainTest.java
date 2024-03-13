@@ -26,7 +26,6 @@ public class MainTest {
         consoleOutput = new StringWriter();
         originalSystemOut = System.out;
         System.out.println("Setting up the test database...");
-//        System.setOut(new PrintStream(String.valueOf(consoleOutput)));
     }
 
     @AfterEach
@@ -36,12 +35,12 @@ public class MainTest {
     }
 
     @Test
-    public void testDataInsertion() throws IOException, SQLException, ClassNotFoundException {
+    public void testDataInsertion() {
         Main.main(null);
     }
 
     @Test
-    public void testExecuteScript() throws IOException, SQLException {
+    public void testExecuteScript() throws SQLException {
         Main.executeScript(connection, "src/test/resources/sql/init_tables.sql");
     }
 
@@ -56,34 +55,85 @@ public class MainTest {
         assertEquals("src/main/resources/sql/", properties.getProperty("SQL_FILE_PATH"));
 
     }
+
     @Test
-    public void testTableData() throws SQLException {
-        // Execute SQL scripts to populate tables
+    public void testTb2_2Data() throws SQLException {
         Main.executeScript(connection, "src/test/resources/sql/init_tables.sql");
-        Main.executeScripts(connection, "src/test/resources/sql/", "code1.sql", "code2.sql");
-
-        // Test data in the tables
-        testTb2_2Data();
-        testTb2_1Data();
-    }
-
-    private void testTb2_2Data() throws SQLException {
+        Main.executeScripts(connection, "src/test/resources/sql/", "code2.sql");
         try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_tb2_2");
              ResultSet resultSet = statement.executeQuery()) {
             assertTrue(resultSet.next());
             int rowCount = resultSet.getInt(1);
-            assertEquals(0, rowCount); // Assuming there are 2 users in the table
+            assertEquals(0, rowCount);
         }
-
-        // Add more assertions to test specific data in the users table if needed
     }
 
-    private void testTb2_1Data() throws SQLException {
+    @Test
+    public void testTb2_1Data() throws SQLException {
+        Main.executeScript(connection, "src/test/resources/sql/init_tables.sql");
+        Main.executeScripts(connection, "src/test/resources/sql/", "code1.sql");
+
         try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_tb2_1");
              ResultSet resultSet = statement.executeQuery()) {
             assertTrue(resultSet.next());
             int rowCount = resultSet.getInt(1);
-            assertEquals(70, rowCount); // Assuming there are 5 products in the table
+            assertEquals(70, rowCount);
+        }
+    }
+
+    @Test
+    public void testtab_t_5_c_pData() throws SQLException {
+        Main.executeScript(connection, "src/test/resources/sql/init_tables.sql");
+        Main.executeScripts(connection, "src/test/resources/sql/", "code4.sql");
+
+        try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_t_5_c_p");
+             ResultSet resultSet = statement.executeQuery()) {
+            assertTrue(resultSet.next());
+            int rowCount = resultSet.getInt(1);
+            assertEquals(1, rowCount);
+        }
+
+    }
+
+    @Test
+    public void testtab_t_5_c_sData() throws SQLException {
+        Main.executeScript(connection, "src/test/resources/sql/init_tables.sql");
+        Main.executeScripts(connection, "src/test/resources/sql/", "code5.sql");
+
+        try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_t_5_c_s");
+             ResultSet resultSet = statement.executeQuery()) {
+            assertTrue(resultSet.next());
+            int rowCount = resultSet.getInt(1);
+            assertEquals(1, rowCount);
+        }
+
+    }
+
+
+    @Test
+    public void testtab_t_a_l_p_bData() throws SQLException {
+        Main.executeScript(connection, "src/test/resources/sql/init_tables.sql");
+        Main.executeScripts(connection, "src/test/resources/sql/", "code7.sql");
+
+        try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_t_a_l_p_b");
+             ResultSet resultSet = statement.executeQuery()) {
+            assertTrue(resultSet.next());
+            int rowCount = resultSet.getInt(1);
+            assertEquals(0, rowCount);
+        }
+
+    }
+
+    @Test
+    public void testtab_t_a_l_s_bData() throws SQLException {
+        Main.executeScript(connection, "src/test/resources/sql/init_tables.sql");
+        Main.executeScripts(connection, "src/test/resources/sql/", "code8.sql");
+
+        try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_t_a_l_s_b");
+             ResultSet resultSet = statement.executeQuery()) {
+            assertTrue(resultSet.next());
+            int rowCount = resultSet.getInt(1);
+            assertEquals(0, rowCount);
         }
 
     }
