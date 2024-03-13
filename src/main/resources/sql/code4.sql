@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS tab_t_5_c_p AS
+CREATE TABLE IF NOT EXISTS demo.tab_t_5_c_p AS
 SELECT 
       a.col_o_i,
       sum(
@@ -9,9 +9,9 @@ SELECT
           END
       ) AS col_s_c_c
 FROM 
-     test.tab_sbfa AS a 
+     demo.tab_sbfa AS a
 INNER JOIN 
-     test.tab_c_gt AS b ON a.col_s_1::numeric = b.col_s_s_1::numeric
+     demo.tab_c_gt AS b ON a.col_s_1::numeric = b.col_s_s_1::numeric
 WHERE 
      a.col_m_p_i = 'PROP' 
 AND b.col_s_t_d >= (CAST('2022-11-01' AS DATE) - INTERVAL '12 months') 

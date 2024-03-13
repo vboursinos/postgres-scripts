@@ -20,6 +20,27 @@ public class Main {
             String sqlFilePath = "src/main/resources/sql/init_tables.sql";
             executeScript(connection, sqlFilePath);
 
+            String code1sqlFilePath = "src/main/resources/sql/code1.sql";
+            executeScript(connection, code1sqlFilePath);
+
+            String code2sqlFilePath = "src/main/resources/sql/code2.sql";
+            executeScript(connection, code2sqlFilePath);
+
+//            String code3sqlFilePath = "src/main/resources/sql/code3.sql";
+//            executeScript(connection, code3sqlFilePath);
+
+            String code4sqlFilePath = "src/main/resources/sql/code4.sql";
+            executeScript(connection, code4sqlFilePath);
+
+            String code5sqlFilePath = "src/main/resources/sql/code5.sql";
+            executeScript(connection, code5sqlFilePath);
+
+            String code7sqlFilePath = "src/main/resources/sql/code7.sql";
+            executeScript(connection, code7sqlFilePath);
+
+            String code8sqlFilePath = "src/main/resources/sql/code8.sql";
+            executeScript(connection, code8sqlFilePath);
+
             // Close connection
             connection.close();
 

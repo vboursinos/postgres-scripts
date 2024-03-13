@@ -1,6 +1,6 @@
+DROP SCHEMA IF EXISTS demo CASCADE;
+
 CREATE SCHEMA IF NOT EXISTS demo;
-
-
 
 CREATE TABLE demo.tab_c_gt (
     col_s_s_1 BIGINT,

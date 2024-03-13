@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS tab_tb2_1 AS 
+CREATE TABLE IF NOT EXISTS demo.tab_tb2_1 AS
 SELECT 
   col_s_1,
    SUM(
@@ -16,8 +16,8 @@ FROM
 	CASE WHEN col_s_c_d_i ='d' THEN col_s_t_d ELSE NULL END as col_s_t_d,
 	CEILING(EXTRACT(MONTH FROM AGE(CAST('2022-11-01' AS DATE), CAST(b.col_s_t_d AS DATE)))) as col_t_m,
 	b.col_s_c_d_i, b.col_s_t_u_a  
-   	FROM test.tab_oab  AS a 
-   INNER JOIN test.tab_c_gt b
+   	FROM demo.tab_oab  AS a
+   INNER JOIN demo.tab_c_gt b
 	ON a.col_s_1 = CAST(b.col_s_s_1 AS INT8)
    AND a.col_m_p_i = 'PROP'
    AND b.col_s_t_d >= (CAST('2022-11-01' AS DATE) - INTERVAL '24 months') AND b.col_s_t_d < CAST('2022-11-01' AS DATE)

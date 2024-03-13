@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS tab_t_5_c_s AS
+CREATE TABLE IF NOT EXISTS demo.tab_t_5_c_s AS
 SELECT 
 	a.col_o_i,
 	SUM(
@@ -10,9 +10,9 @@ SELECT
 			ELSE 0 
 		END) as col_s_c_c
 FROM 
-    test.tab_sbfa as a 
+    demo.tab_sbfa as a
 INNER JOIN 
-	test.tab_c_gt AS b
+	demo.tab_c_gt AS b
 	ON a.col_s_1 = b.col_s_s_1
 	AND TRIM(CAST(b.col_se_s_1 AS TEXT)) <> TRIM(CAST(b.col_s_s_1 AS TEXT))
 WHERE 

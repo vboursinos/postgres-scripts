@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS tab_t_a_l_p_b AS
+CREATE TABLE IF NOT EXISTS demo.tab_t_a_l_p_b AS
 SELECT 
 	a.col_s_1,
 	a.col_o_i,
@@ -17,9 +17,9 @@ SELECT
 		END
 	) AS col_s_r
 FROM 
-	test.tab_sbfa AS a 
+	demo.tab_sbfa AS a
 INNER JOIN 
-	test.tab_c_gt AS b
+	demo.tab_c_gt AS b
 	ON a.col_s_1 = b.col_s_s_1 
 WHERE
 	a.col_m_p_i NOT IN ('PROP')

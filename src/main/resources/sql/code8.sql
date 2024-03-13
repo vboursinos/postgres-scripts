@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS tab_t_a_l_s_b AS
+CREATE TABLE IF NOT EXISTS demo.tab_t_a_l_s_b AS
 SELECT 
     a.col_s_1,
     a.col_o_i,
@@ -15,9 +15,9 @@ SELECT
             ELSE 0 
         END) AS col_s_r
 FROM 
-    test.tab_sbfa as a 
+    demo.tab_sbfa as a
 INNER JOIN 
-    test.tab_c_gt b
+    demo.tab_c_gt b
 ON 
     a.col_s_1::numeric = b.col_se_s_1::numeric 
 --    AND trim(b.col_se_s_1) <> trim(b.col_s_s_1)
