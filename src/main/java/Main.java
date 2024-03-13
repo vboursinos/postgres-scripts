@@ -1,3 +1,5 @@
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -11,11 +13,12 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            Properties properties = loadProperties("src/main/resources/configuration.properties");
+            Dotenv dotenv = Dotenv.configure().load();
+            String url = dotenv.get("POSTGRES_URL");
+            String user = dotenv.get("POSTGRES_USER");
+            String password = dotenv.get("POSTGRES_PASSWORD");
 
-            String url = properties.getProperty("POSTGRES_URL");
-            String user = properties.getProperty("POSTGRES_USER");
-            String password = properties.getProperty("POSTGRES_PASSWORD");
+            Properties properties = loadProperties("src/main/resources/configuration.properties");
             String sqlFilePath = properties.getProperty("SQL_FILE_PATH");
 
             try (Connection connection = DriverManager.getConnection(url, user, password)) {

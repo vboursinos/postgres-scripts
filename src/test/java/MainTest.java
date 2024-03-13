@@ -1,3 +1,4 @@
+import io.github.cdimascio.dotenv.Dotenv;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,18 +12,19 @@ import java.util.Properties;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MainTest {
-
-    private static final String TEST_DB_URL = "jdbc:postgresql://localhost:5432/mydatabase";
-    private static final String TEST_DB_USER = "myuser";
-    private static final String TEST_DB_PASSWORD = "secret";
-
     private Connection connection;
     private StringWriter consoleOutput;
     private PrintStream originalSystemOut;
 
     @BeforeEach
     public void setUp() throws SQLException, IOException {
-        connection = DriverManager.getConnection(TEST_DB_URL, TEST_DB_USER, TEST_DB_PASSWORD);
+        Dotenv dotenv = Dotenv.configure().load();
+
+        String testDbUrl = dotenv.get("POSTGRES_URL");
+        String testDbUser = dotenv.get("POSTGRES_USER");
+        String testDbPassword = dotenv.get("POSTGRES_PASSWORD");
+
+        connection = DriverManager.getConnection(testDbUrl, testDbUser, testDbPassword);
         consoleOutput = new StringWriter();
         originalSystemOut = System.out;
         System.out.println("Setting up the test database...");
