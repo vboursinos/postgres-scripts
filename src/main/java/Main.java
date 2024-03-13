@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Statement;
+import java.sql.*;
 
 public class Main {
 
@@ -19,32 +17,43 @@ public class Main {
             Connection connection = DriverManager.getConnection(url, user, password);
 
             // Read SQL file
-            String sqlFilePath = "src/main/resources/files/init_tables.sql";
-            BufferedReader reader = new BufferedReader(new FileReader(sqlFilePath));
-            StringBuilder stringBuilder = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                stringBuilder.append(line);
-                stringBuilder.append("\n");
-            }
-            reader.close();
-            String sqlQuery = stringBuilder.toString();
+            String sqlFilePath = "src/main/resources/sql/init_tables.sql";
+            executeScript(connection, sqlFilePath);
 
-            // Create statement
-            Statement statement = connection.createStatement();
-
-            // Execute SQL script
-            statement.execute(sqlQuery);
-
-            // Close connections
-            statement.close();
+            // Close connection
             connection.close();
 
-            System.out.println("SQL script executed successfully.");
+            System.out.println("Data insertion completed successfully.");
 
         } catch (Exception e) {
             System.err.println("Error executing SQL script: " + e.getMessage());
             e.printStackTrace();
         }
     }
+
+    private static void executeScript(Connection connection, String scriptFilePath) throws SQLException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(scriptFilePath))) {
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+                stringBuilder.append("\n");
+            }
+            String[] sqlStatements = stringBuilder.toString().split(";");
+
+            // Create statement
+            Statement statement = connection.createStatement();
+
+            // Execute each SQL statement
+            for (String sql : sqlStatements) {
+                if (!sql.trim().isEmpty()) {
+                    statement.execute(sql);
+                }
+            }
+            statement.close();
+        } catch (Exception e) {
+            throw new SQLException("Error executing SQL script: " + e.getMessage());
+        }
+    }
+
 }
