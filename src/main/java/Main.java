@@ -33,7 +33,7 @@ public class Main {
         }
     }
 
-    private static Properties loadProperties(String filePath) throws IOException {
+    public static Properties loadProperties(String filePath) throws IOException {
         try (FileReader fileReader = new FileReader(filePath)) {
             Properties properties = new Properties();
             properties.load(fileReader);
@@ -41,7 +41,7 @@ public class Main {
         }
     }
 
-    private static void executeScript(Connection connection, String filePath) throws SQLException {
+    public static void executeScript(Connection connection, String filePath) throws SQLException {
         try (Statement statement = connection.createStatement();
              BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 
@@ -63,7 +63,7 @@ public class Main {
         }
     }
 
-    private static void executeScripts(Connection connection, String sqlFilePath, String... fileNames) throws SQLException {
+    public static void executeScripts(Connection connection, String sqlFilePath, String... fileNames) throws SQLException {
         for (String fileName : fileNames) {
             executeScript(connection, sqlFilePath + fileName);
         }
