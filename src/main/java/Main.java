@@ -4,45 +4,17 @@ import java.sql.*;
 
 public class Main {
 
-    public static void main(String[] args) {
-        String url = "jdbc:postgresql://localhost:5432/mydatabase";
-        String user = "myuser";
-        String password = "secret";
+    private static final String URL = "jdbc:postgresql://localhost:5432/mydatabase";
+    private static final String USER = "myuser";
+    private static final String PASSWORD = "secret";
+    private static final String SQL_FILE_PATH = "src/main/resources/sql/";
 
-        try {
-            // Load the PostgreSQL JDBC driver
+    public static void main(String[] args) {
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
             Class.forName("org.postgresql.Driver");
 
-            // Establish connection to the database
-            Connection connection = DriverManager.getConnection(url, user, password);
-
-            // Read SQL file
-            String sqlFilePath = "src/main/resources/sql/init_tables.sql";
-            executeScript(connection, sqlFilePath);
-
-            String code1sqlFilePath = "src/main/resources/sql/code1.sql";
-            executeScript(connection, code1sqlFilePath);
-
-            String code2sqlFilePath = "src/main/resources/sql/code2.sql";
-            executeScript(connection, code2sqlFilePath);
-
-//            String code3sqlFilePath = "src/main/resources/sql/code3.sql";
-//            executeScript(connection, code3sqlFilePath);
-
-            String code4sqlFilePath = "src/main/resources/sql/code4.sql";
-            executeScript(connection, code4sqlFilePath);
-
-            String code5sqlFilePath = "src/main/resources/sql/code5.sql";
-            executeScript(connection, code5sqlFilePath);
-
-            String code7sqlFilePath = "src/main/resources/sql/code7.sql";
-            executeScript(connection, code7sqlFilePath);
-
-            String code8sqlFilePath = "src/main/resources/sql/code8.sql";
-            executeScript(connection, code8sqlFilePath);
-
-            // Close connection
-            connection.close();
+            executeScript(connection, "init_tables.sql");
+            executeScripts(connection, "code1.sql", "code2.sql", "code4.sql", "code5.sql", "code7.sql", "code8.sql");
 
             System.out.println("Data insertion completed successfully.");
 
@@ -52,8 +24,9 @@ public class Main {
         }
     }
 
-    private static void executeScript(Connection connection, String scriptFilePath) throws SQLException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(scriptFilePath))) {
+    private static void executeScript(Connection connection, String fileName) throws SQLException {
+        String filePath = SQL_FILE_PATH + fileName;
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             StringBuilder stringBuilder = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
@@ -62,18 +35,21 @@ public class Main {
             }
             String[] sqlStatements = stringBuilder.toString().split(";");
 
-            // Create statement
-            Statement statement = connection.createStatement();
-
-            // Execute each SQL statement
-            for (String sql : sqlStatements) {
-                if (!sql.trim().isEmpty()) {
-                    statement.execute(sql);
+            try (Statement statement = connection.createStatement()) {
+                for (String sql : sqlStatements) {
+                    if (!sql.trim().isEmpty()) {
+                        statement.execute(sql);
+                    }
                 }
             }
-            statement.close();
         } catch (Exception e) {
             throw new SQLException("Error executing SQL script: " + e.getMessage());
+        }
+    }
+
+    private static void executeScripts(Connection connection, String... fileNames) throws SQLException {
+        for (String fileName : fileNames) {
+            executeScript(connection, fileName);
         }
     }
 
