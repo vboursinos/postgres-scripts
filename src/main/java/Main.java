@@ -1,4 +1,6 @@
 import io.github.cdimascio.dotenv.Dotenv;
+import org.postgresql.copy.CopyManager;
+import org.postgresql.core.BaseConnection;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -25,6 +27,12 @@ public class Main {
                 Class.forName("org.postgresql.Driver");
 
                 executeScript(connection, sqlFilePath + "init_tables.sql");
+                CopyManager copyManager = new CopyManager((BaseConnection) connection);
+                insertData("src/main/resources/csv/tab_c_gt.csv", "demo.tab_c_gt", copyManager);
+                insertData("src/main/resources/csv/tab_oab.csv", "demo.tab_oab", copyManager);
+                insertData("src/main/resources/csv/tab_sbfa.csv", "demo.tab_sbfa", copyManager);
+                insertData("src/main/resources/csv/tab_t_5_c_c_1.csv", "demo.tab_t_5_c_c_1", copyManager);
+
                 executeScripts(connection, sqlFilePath,
                         "code1.sql", "code2.sql", "code4.sql", "code5.sql", "code7.sql", "code8.sql");
 
@@ -69,6 +77,15 @@ public class Main {
     public static void executeScripts(Connection connection, String sqlFilePath, String... fileNames) throws SQLException {
         for (String fileName : fileNames) {
             executeScript(connection, sqlFilePath + fileName);
+            System.out.println("Script " + fileName + " executed successfully.");
         }
+    }
+
+    public static void insertData (String csvFilePath , String tableName, CopyManager copyManager) throws IOException, SQLException {
+        FileReader fileReader = new FileReader(csvFilePath);
+        copyManager.copyIn("COPY " + tableName + " FROM STDIN WITH CSV HEADER DELIMITER ','", fileReader);
+
+        System.out.println("Data imported successfully from CSV file: " + csvFilePath);
+
     }
 }
