@@ -2,14 +2,14 @@ CREATE TABLE IF NOT EXISTS demo.tab_tb2_1 AS
 SELECT 
   col_s_1,
    SUM(
-   CASE WHEN col_s_c_d_i='d' THEN col_s_t_u_a 
-   WHEN col_s_c_d_i='c' THEN -1*col_s_t_u_a  
+   CASE WHEN col_s_c_d_i='D' THEN col_s_t_u_a
+   WHEN col_s_c_d_i='C' THEN -1*col_s_t_u_a
    ELSE 0 END
       ) AS col_s_c,
-   SUM(CASE WHEN col_s_c_d_i='d' THEN col_s_t_u_a ELSE 0 END) AS col_d_c,
-   SUM(CASE WHEN col_s_c_d_i='c' THEN col_s_t_u_a ELSE 0 END) AS col_c_cv,
-   SUM(CASE WHEN col_s_c_d_i='d' THEN 1 ELSE 0 END) AS col_s_r,
-   SUM(CASE WHEN col_s_c_d_i='c' THEN 1 ELSE 0 END) AS col_c_r
+   SUM(CASE WHEN col_s_c_d_i='D' THEN col_s_t_u_a ELSE 0 END) AS col_d_c,
+   SUM(CASE WHEN col_s_c_d_i='C' THEN col_s_t_u_a ELSE 0 END) AS col_c_cv,
+   SUM(CASE WHEN col_s_c_d_i='D' THEN 1 ELSE 0 END) AS col_s_r,
+   SUM(CASE WHEN col_s_c_d_i='C' THEN 1 ELSE 0 END) AS col_c_r
 FROM 
 (
     SELECT a.col_s_1,

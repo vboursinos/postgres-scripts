@@ -66,7 +66,7 @@ public class MainTest {
              ResultSet resultSet = statement.executeQuery()) {
             assertTrue(resultSet.next());
             int rowCount = resultSet.getInt(1);
-            assertEquals(0, rowCount);
+            assertEquals(8, rowCount);
         }
     }
 
@@ -121,7 +121,7 @@ public class MainTest {
              ResultSet resultSet = statement.executeQuery()) {
             assertTrue(resultSet.next());
             int rowCount = resultSet.getInt(1);
-            assertEquals(0, rowCount);
+            assertEquals(30, rowCount);
         }
 
     }
@@ -135,7 +135,7 @@ public class MainTest {
              ResultSet resultSet = statement.executeQuery()) {
             assertTrue(resultSet.next());
             int rowCount = resultSet.getInt(1);
-            assertEquals(0, rowCount);
+            assertEquals(30, rowCount);
         }
 
     }

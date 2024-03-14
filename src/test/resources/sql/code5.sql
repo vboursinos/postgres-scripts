@@ -3,9 +3,9 @@ SELECT
 	a.col_o_i,
 	SUM(
 	    CASE 
-			WHEN b.col_s_c_d_i='d' 
-			THEN b.col_s_t_u_a 
-			WHEN b.col_s_c_d_i='c' 
+			WHEN b.col_s_c_d_i='D'
+			THEN b.col_s_t_u_a
+			WHEN b.col_s_c_d_i='C'
 			THEN -1 * b.col_s_t_u_a
 			ELSE 0 
 		END) as col_s_c_c

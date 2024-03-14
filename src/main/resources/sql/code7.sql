@@ -5,14 +5,14 @@ SELECT
 	b.col_s_t_d,
 	SUM(
 		CASE 
-			WHEN b.col_s_c_d_i='d' THEN b.col_s_t_u_a 
-			WHEN b.col_s_c_d_i='c' THEN -1 * b.col_s_t_u_a
+			WHEN b.col_s_c_d_i='D' THEN b.col_s_t_u_a
+			WHEN b.col_s_c_d_i='C' THEN -1 * b.col_s_t_u_a
 			ELSE 0 
 		END
 	) AS col_s_c,
 	SUM(
 		CASE 
-			WHEN b.col_s_c_d_i='d' THEN 1 
+			WHEN b.col_s_c_d_i='D' THEN 1
 			ELSE 0 
 		END
 	) AS col_s_r
@@ -32,15 +32,15 @@ GROUP BY
 HAVING  
 	SUM(
 		CASE 
-			WHEN b.col_s_c_d_i='d' THEN b.col_s_t_u_a 
-			WHEN b.col_s_c_d_i='c' THEN -1 * b.col_s_t_u_a
+			WHEN b.col_s_c_d_i='D' THEN b.col_s_t_u_a
+			WHEN b.col_s_c_d_i='C' THEN -1 * b.col_s_t_u_a
 			ELSE 0 
 		END
 	) > 10 
 	AND 
 	SUM(
 		CASE 
-			WHEN b.col_s_c_d_i='d' THEN 1 
+			WHEN b.col_s_c_d_i='D' THEN 1
 			ELSE 0 
         END
     ) > 0;	
