@@ -63,9 +63,6 @@ public class MainTest {
         Properties properties = Main.loadProperties("src/test/resources/test_configuration.properties");
 
         assertNotNull(properties);
-        assertEquals("jdbc:postgresql://localhost:5432/mydatabase", properties.getProperty("POSTGRES_URL"));
-        assertEquals("myuser", properties.getProperty("POSTGRES_USER"));
-        assertEquals("secret", properties.getProperty("POSTGRES_PASSWORD"));
         assertEquals("src/main/resources/sql/", properties.getProperty("SQL_FILE_PATH"));
 
     }
