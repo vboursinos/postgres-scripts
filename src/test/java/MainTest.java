@@ -31,13 +31,13 @@ public class MainTest {
         originalSystemOut = System.out;
         System.out.println("Setting up the test database...");
 
-        Main.executeScript(connection, "src/test/resources/sql/init_tables.sql");
+        Main.executeScript(connection, "src/main/resources/sql/init_tables.sql");
 
         CopyManager copyManager = new CopyManager((BaseConnection) connection);
-        Main.insertData("src/test/resources/csv/tab_c_gt.csv", "demo.tab_c_gt", copyManager);
-        Main.insertData("src/test/resources/csv/tab_oab.csv", "demo.tab_oab", copyManager);
-        Main.insertData("src/test/resources/csv/tab_sbfa.csv", "demo.tab_sbfa", copyManager);
-        Main.insertData("src/test/resources/csv/tab_t_5_c_c_1.csv", "demo.tab_t_5_c_c_1", copyManager);
+        Main.insertData("src/main/resources/csv/tab_c_gt.csv", "demo.tab_c_gt", copyManager);
+        Main.insertData("src/main/resources/csv/tab_oab.csv", "demo.tab_oab", copyManager);
+        Main.insertData("src/main/resources/csv/tab_sbfa.csv", "demo.tab_sbfa", copyManager);
+        Main.insertData("src/main/resources/csv/tab_t_5_c_c_1.csv", "demo.tab_t_5_c_c_1", copyManager);
 
         System.out.println("Test database setup completed.");
     }
@@ -55,7 +55,7 @@ public class MainTest {
 
     @Test
     public void testExecuteScript() throws SQLException {
-        Main.executeScript(connection, "src/test/resources/sql/init_tables.sql");
+        Main.executeScript(connection, "src/main/resources/sql/init_tables.sql");
     }
 
     @Test
@@ -72,7 +72,7 @@ public class MainTest {
 
     @Test
     public void testTb2_2Data() throws SQLException {
-        Main.executeScripts(connection, "src/test/resources/sql/", "code2.sql");
+        Main.executeScripts(connection, "src/main/resources/sql/", "code2.sql");
         try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_tb2_2");
              ResultSet resultSet = statement.executeQuery()) {
             assertTrue(resultSet.next());
@@ -83,7 +83,7 @@ public class MainTest {
 
     @Test
     public void testTb2_1Data() throws SQLException {
-        Main.executeScripts(connection, "src/test/resources/sql/", "code1.sql");
+        Main.executeScripts(connection, "src/main/resources/sql/", "code1.sql");
 
         try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_tb2_1");
              ResultSet resultSet = statement.executeQuery()) {
@@ -95,7 +95,7 @@ public class MainTest {
 
     @Test
     public void testtab_t_5_c_pData() throws SQLException {
-        Main.executeScripts(connection, "src/test/resources/sql/", "code4.sql");
+        Main.executeScripts(connection, "src/main/resources/sql/", "code4.sql");
 
         try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_t_5_c_p");
              ResultSet resultSet = statement.executeQuery()) {
@@ -108,7 +108,7 @@ public class MainTest {
 
     @Test
     public void testtab_t_5_c_sData() throws SQLException {
-        Main.executeScripts(connection, "src/test/resources/sql/", "code5.sql");
+        Main.executeScripts(connection, "src/main/resources/sql/", "code5.sql");
 
         try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_t_5_c_s");
              ResultSet resultSet = statement.executeQuery()) {
@@ -122,7 +122,7 @@ public class MainTest {
 
     @Test
     public void testtab_t_a_l_p_bData() throws SQLException {
-        Main.executeScripts(connection, "src/test/resources/sql/", "code7.sql");
+        Main.executeScripts(connection, "src/main/resources/sql/", "code7.sql");
 
         try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_t_a_l_p_b");
              ResultSet resultSet = statement.executeQuery()) {
@@ -135,7 +135,7 @@ public class MainTest {
 
     @Test
     public void testtab_t_a_l_s_bData() throws SQLException {
-        Main.executeScripts(connection, "src/test/resources/sql/", "code8.sql");
+        Main.executeScripts(connection, "src/main/resources/sql/", "code8.sql");
 
         try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_t_a_l_s_b");
              ResultSet resultSet = statement.executeQuery()) {
