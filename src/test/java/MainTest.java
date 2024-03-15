@@ -49,7 +49,7 @@ public class MainTest {
     }
 
     @Test
-    public void testTb2_2Data() throws SQLException {
+    public void testCode2() throws SQLException {
         long startTime = System.currentTimeMillis();
         Main.executeScripts(connection, "src/main/resources/sql/", "code2.sql");
         long endTime = System.currentTimeMillis();
@@ -64,7 +64,7 @@ public class MainTest {
     }
 
     @Test
-    public void testTb2_1Data() throws SQLException {
+    public void testCode1() throws SQLException {
         long startTime = System.currentTimeMillis();
         Main.executeScripts(connection, "src/main/resources/sql/", "code1.sql");
         long endTime = System.currentTimeMillis();
@@ -79,7 +79,7 @@ public class MainTest {
     }
 
     @Test
-    public void testtab_t_5_c_pData() throws SQLException {
+    public void testCode4() throws SQLException {
         long startTime = System.currentTimeMillis();
         Main.executeScripts(connection, "src/main/resources/sql/", "code4.sql");
         long endTime = System.currentTimeMillis();
@@ -95,7 +95,7 @@ public class MainTest {
     }
 
     @Test
-    public void testtab_t_5_c_sData() throws SQLException {
+    public void testCode5() throws SQLException {
         long startTime = System.currentTimeMillis();
         Main.executeScripts(connection, "src/main/resources/sql/", "code5.sql");
         long endTime = System.currentTimeMillis();
@@ -112,7 +112,7 @@ public class MainTest {
 
 
     @Test
-    public void testtab_t_a_l_p_bData() throws SQLException {
+    public void testCode7() throws SQLException {
         long startTime = System.currentTimeMillis();
         Main.executeScripts(connection, "src/main/resources/sql/", "code7.sql");
         long endTime = System.currentTimeMillis();
@@ -127,7 +127,7 @@ public class MainTest {
     }
 
     @Test
-    public void testtab_t_a_l_s_bData() throws SQLException {
+    public void testCode8() throws SQLException {
         long startTime = System.currentTimeMillis();
         Main.executeScripts(connection, "src/main/resources/sql/", "code8.sql");
         long endTime = System.currentTimeMillis();
@@ -139,6 +139,5 @@ public class MainTest {
             int rowCount = resultSet.getInt(1);
             assertEquals(31, rowCount);
         }
-
     }
 }
