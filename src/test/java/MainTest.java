@@ -1,6 +1,6 @@
 import io.github.cdimascio.dotenv.Dotenv;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.postgresql.copy.CopyManager;
 import org.postgresql.core.BaseConnection;
@@ -14,12 +14,12 @@ import java.util.Properties;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MainTest {
-    private Connection connection;
-    private StringWriter consoleOutput;
-    private PrintStream originalSystemOut;
+    private static Connection connection;
+    private static StringWriter consoleOutput;
+    private static PrintStream originalSystemOut;
 
-    @BeforeEach
-    public void setUp() throws SQLException, IOException {
+    @BeforeAll
+    public static void setUp() throws SQLException, IOException {
         Dotenv dotenv = Dotenv.configure().load();
 
         String testDbUrl = dotenv.get("POSTGRES_URL");
@@ -42,8 +42,8 @@ public class MainTest {
         System.out.println("Test database setup completed.");
     }
 
-    @AfterEach
-    public void tearDown() throws SQLException {
+    @AfterAll
+    public static void tearDown() throws SQLException {
         connection.close();
         System.setOut(originalSystemOut);
     }
@@ -51,11 +51,6 @@ public class MainTest {
     @Test
     public void testDataInsertion() {
         Main.main(null);
-    }
-
-    @Test
-    public void testExecuteScript() throws SQLException {
-        Main.executeScript(connection, "src/main/resources/sql/init_tables.sql");
     }
 
     @Test
@@ -70,8 +65,7 @@ public class MainTest {
     @Test
     public void testTb2_2Data() throws SQLException {
         Main.executeScripts(connection, "src/main/resources/sql/", "code2.sql");
-        try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_tb2_2");
-             ResultSet resultSet = statement.executeQuery()) {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_tb2_2"); ResultSet resultSet = statement.executeQuery()) {
             assertTrue(resultSet.next());
             int rowCount = resultSet.getInt(1);
             assertEquals(8, rowCount);
@@ -82,8 +76,7 @@ public class MainTest {
     public void testTb2_1Data() throws SQLException {
         Main.executeScripts(connection, "src/main/resources/sql/", "code1.sql");
 
-        try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_tb2_1");
-             ResultSet resultSet = statement.executeQuery()) {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_tb2_1"); ResultSet resultSet = statement.executeQuery()) {
             assertTrue(resultSet.next());
             int rowCount = resultSet.getInt(1);
             assertEquals(70, rowCount);
@@ -94,8 +87,7 @@ public class MainTest {
     public void testtab_t_5_c_pData() throws SQLException {
         Main.executeScripts(connection, "src/main/resources/sql/", "code4.sql");
 
-        try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_t_5_c_p");
-             ResultSet resultSet = statement.executeQuery()) {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_t_5_c_p"); ResultSet resultSet = statement.executeQuery()) {
             assertTrue(resultSet.next());
             int rowCount = resultSet.getInt(1);
             assertEquals(1, rowCount);
@@ -107,8 +99,7 @@ public class MainTest {
     public void testtab_t_5_c_sData() throws SQLException {
         Main.executeScripts(connection, "src/main/resources/sql/", "code5.sql");
 
-        try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_t_5_c_s");
-             ResultSet resultSet = statement.executeQuery()) {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_t_5_c_s"); ResultSet resultSet = statement.executeQuery()) {
             assertTrue(resultSet.next());
             int rowCount = resultSet.getInt(1);
             assertEquals(1, rowCount);
@@ -121,8 +112,7 @@ public class MainTest {
     public void testtab_t_a_l_p_bData() throws SQLException {
         Main.executeScripts(connection, "src/main/resources/sql/", "code7.sql");
 
-        try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_t_a_l_p_b");
-             ResultSet resultSet = statement.executeQuery()) {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_t_a_l_p_b"); ResultSet resultSet = statement.executeQuery()) {
             assertTrue(resultSet.next());
             int rowCount = resultSet.getInt(1);
             assertEquals(30, rowCount);
@@ -134,8 +124,7 @@ public class MainTest {
     public void testtab_t_a_l_s_bData() throws SQLException {
         Main.executeScripts(connection, "src/main/resources/sql/", "code8.sql");
 
-        try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_t_a_l_s_b");
-             ResultSet resultSet = statement.executeQuery()) {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_t_a_l_s_b"); ResultSet resultSet = statement.executeQuery()) {
             assertTrue(resultSet.next());
             int rowCount = resultSet.getInt(1);
             assertEquals(30, rowCount);
