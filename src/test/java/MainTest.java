@@ -34,10 +34,10 @@ public class MainTest {
         Main.executeScript(connection, "src/main/resources/sql/init_tables.sql");
 
         CopyManager copyManager = new CopyManager((BaseConnection) connection);
-        Main.insertData("src/main/resources/csv/tab_c_gt.csv", "demo.tab_c_gt", copyManager);
-        Main.insertData("src/main/resources/csv/tab_oab.csv", "demo.tab_oab", copyManager);
-        Main.insertData("src/main/resources/csv/tab_sbfa.csv", "demo.tab_sbfa", copyManager);
-        Main.insertData("src/main/resources/csv/tab_t_5_c_c_1.csv", "demo.tab_t_5_c_c_1", copyManager);
+        Main.insertData("src/main/resources/big-csv/tab_c_gt.csv", "demo.tab_c_gt", copyManager);
+        Main.insertData("src/main/resources/big-csv/tab_oab.csv", "demo.tab_oab", copyManager);
+        Main.insertData("src/main/resources/big-csv/tab_sbfa.csv", "demo.tab_sbfa", copyManager);
+        Main.insertData("src/main/resources/big-csv/tab_t_5_c_c_1.csv", "demo.tab_t_5_c_c_1", copyManager);
 
         System.out.println("Test database setup completed.");
     }
@@ -110,19 +110,26 @@ public class MainTest {
 
     @Test
     public void testtab_t_a_l_p_bData() throws SQLException {
+        long startTime = System.currentTimeMillis();
         Main.executeScripts(connection, "src/main/resources/sql/", "code7.sql");
-
+        long endTime = System.currentTimeMillis();
+        double duration = (endTime - startTime)/1000.0;
+        System.out.println("Duration: " + duration + "s");
         try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_t_a_l_p_b"); ResultSet resultSet = statement.executeQuery()) {
             assertTrue(resultSet.next());
             int rowCount = resultSet.getInt(1);
-            assertEquals(30, rowCount);
+            assertEquals(31, rowCount);
         }
 
     }
 
     @Test
     public void testtab_t_a_l_s_bData() throws SQLException {
+        long startTime = System.currentTimeMillis();
         Main.executeScripts(connection, "src/main/resources/sql/", "code8.sql");
+        long endTime = System.currentTimeMillis();
+        double duration = (endTime - startTime)/1000.0;
+        System.out.println("Duration: " + duration + "s");
 
         try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_t_a_l_s_b"); ResultSet resultSet = statement.executeQuery()) {
             assertTrue(resultSet.next());
