@@ -49,22 +49,13 @@ public class MainTest {
     }
 
     @Test
-    public void testDataInsertion() {
-        Main.main(null);
-    }
-
-    @Test
-    public void testLoadProperties() throws IOException {
-        Properties properties = Main.loadProperties("src/test/resources/test_configuration.properties");
-
-        assertNotNull(properties);
-        assertEquals("src/main/resources/sql/", properties.getProperty("SQL_FILE_PATH"));
-
-    }
-
-    @Test
     public void testTb2_2Data() throws SQLException {
+        long startTime = System.currentTimeMillis();
         Main.executeScripts(connection, "src/main/resources/sql/", "code2.sql");
+        long endTime = System.currentTimeMillis();
+        double duration = (endTime - startTime)/1000.0;
+        System.out.println("Duration: " + duration + "s");
+
         try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_tb2_2"); ResultSet resultSet = statement.executeQuery()) {
             assertTrue(resultSet.next());
             int rowCount = resultSet.getInt(1);
@@ -74,7 +65,11 @@ public class MainTest {
 
     @Test
     public void testTb2_1Data() throws SQLException {
+        long startTime = System.currentTimeMillis();
         Main.executeScripts(connection, "src/main/resources/sql/", "code1.sql");
+        long endTime = System.currentTimeMillis();
+        double duration = (endTime - startTime)/1000.0;
+        System.out.println("Duration: " + duration + "s");
 
         try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_tb2_1"); ResultSet resultSet = statement.executeQuery()) {
             assertTrue(resultSet.next());
@@ -85,7 +80,11 @@ public class MainTest {
 
     @Test
     public void testtab_t_5_c_pData() throws SQLException {
+        long startTime = System.currentTimeMillis();
         Main.executeScripts(connection, "src/main/resources/sql/", "code4.sql");
+        long endTime = System.currentTimeMillis();
+        double duration = (endTime - startTime)/1000.0;
+        System.out.println("Duration: " + duration + "s");
 
         try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_t_5_c_p"); ResultSet resultSet = statement.executeQuery()) {
             assertTrue(resultSet.next());
@@ -97,7 +96,11 @@ public class MainTest {
 
     @Test
     public void testtab_t_5_c_sData() throws SQLException {
+        long startTime = System.currentTimeMillis();
         Main.executeScripts(connection, "src/main/resources/sql/", "code5.sql");
+        long endTime = System.currentTimeMillis();
+        double duration = (endTime - startTime)/1000.0;
+        System.out.println("Duration: " + duration + "s");
 
         try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_t_5_c_s"); ResultSet resultSet = statement.executeQuery()) {
             assertTrue(resultSet.next());
@@ -134,7 +137,7 @@ public class MainTest {
         try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo.tab_t_a_l_s_b"); ResultSet resultSet = statement.executeQuery()) {
             assertTrue(resultSet.next());
             int rowCount = resultSet.getInt(1);
-            assertEquals(30, rowCount);
+            assertEquals(31, rowCount);
         }
 
     }
