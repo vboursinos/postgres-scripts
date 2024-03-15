@@ -8,6 +8,8 @@ import org.postgresql.core.BaseConnection;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.sql.*;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -49,25 +51,27 @@ public class MainTest {
     }
 
     @Test
-    public void testCode2() throws SQLException {
-        long startTime = System.currentTimeMillis();
-        Main.executeScripts(connection, "src/main/resources/sql/", "code2.sql");
-        long endTime = System.currentTimeMillis();
-        double duration = (endTime - startTime) / 1000.0;
-        System.out.println("Duration: " + duration + "s");
-
-        assertRowCountAndColumnCount("tab_tb2_2", 8, 8);
-    }
-
-    @Test
     public void testCode1() throws SQLException {
         long startTime = System.currentTimeMillis();
         Main.executeScripts(connection, "src/main/resources/sql/", "code1.sql");
         long endTime = System.currentTimeMillis();
         double duration = (endTime - startTime) / 1000.0;
         System.out.println("Duration: " + duration + "s");
+        List<String> columnNames = Arrays.asList("col_s_1", "col_s_c", "col_d_c", "col_c_cv", "col_s_r", "col_c_r");
 
-        assertRowCountAndColumnCount("tab_tb2_1", 6, 70);
+        assertRowCountAndColumnCount("tab_tb2_1", 6, 70, columnNames);
+    }
+
+    @Test
+    public void testCode2() throws SQLException {
+        long startTime = System.currentTimeMillis();
+        Main.executeScripts(connection, "src/main/resources/sql/", "code2.sql");
+        long endTime = System.currentTimeMillis();
+        double duration = (endTime - startTime) / 1000.0;
+        System.out.println("Duration: " + duration + "s");
+        List<String> columnNames = Arrays.asList("col_s_1", "col_t_m", "col_m_t_d", "col_s_c", "col_d_c", "col_c_cv", "col_s_r", "col_c_r");
+
+        assertRowCountAndColumnCount("tab_tb2_2", 8, 8, columnNames);
     }
 
     @Test
@@ -77,8 +81,9 @@ public class MainTest {
         long endTime = System.currentTimeMillis();
         double duration = (endTime - startTime) / 1000.0;
         System.out.println("Duration: " + duration + "s");
+        List<String> columnNames = Arrays.asList("col_o_i", "col_s_c_c");
 
-        assertRowCountAndColumnCount("tab_t_5_c_p", 2, 1);
+        assertRowCountAndColumnCount("tab_t_5_c_p", 2, 1, columnNames);
     }
 
     @Test
@@ -88,8 +93,9 @@ public class MainTest {
         long endTime = System.currentTimeMillis();
         double duration = (endTime - startTime) / 1000.0;
         System.out.println("Duration: " + duration + "s");
+        List<String> columnNames = Arrays.asList("col_o_i", "col_s_c_c");
 
-        assertRowCountAndColumnCount("tab_t_5_c_s", 2, 1);
+        assertRowCountAndColumnCount("tab_t_5_c_s", 2, 1, columnNames);
     }
 
 
@@ -100,8 +106,10 @@ public class MainTest {
         long endTime = System.currentTimeMillis();
         double duration = (endTime - startTime) / 1000.0;
         System.out.println("Duration: " + duration + "s");
+        List<String> columnNames = Arrays.asList("col_s_1", "col_o_i", "col_s_t_d", "col_s_c", "col_s_r");
 
-        assertRowCountAndColumnCount("tab_t_a_l_p_b", 5, 30);
+
+        assertRowCountAndColumnCount("tab_t_a_l_p_b", 5, 30, columnNames);
     }
 
     @Test
@@ -111,12 +119,13 @@ public class MainTest {
         long endTime = System.currentTimeMillis();
         double duration = (endTime - startTime) / 1000.0;
         System.out.println("Duration: " + duration + "s");
+        List<String> columnNames = Arrays.asList("col_s_1", "col_o_i", "col_s_t_d", "col_s_c", "col_s_r");
 
-        assertRowCountAndColumnCount("tab_t_a_l_s_b", 5, 30);
+        assertRowCountAndColumnCount("tab_t_a_l_s_b", 5, 30, columnNames);
 
     }
 
-    private void assertRowCountAndColumnCount(String tableName, int expectedColumnCount, int expectedRowCount) throws SQLException {
+    private void assertRowCountAndColumnCount(String tableName, int expectedColumnCount, int expectedRowCount, List<String> expectedColumnNames) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM demo." + tableName);
              ResultSet resultSet = statement.executeQuery()) {
             assertTrue(resultSet.next());
@@ -128,6 +137,8 @@ public class MainTest {
                 int columnCount = 0;
                 while (columns.next()) {
                     columnCount++;
+                    String columnName = columns.getString("COLUMN_NAME");
+                    assertEquals(expectedColumnNames.get(columnCount - 1), columnName);
                 }
                 assertEquals(expectedColumnCount, columnCount);
             }
