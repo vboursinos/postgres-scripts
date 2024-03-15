@@ -60,6 +60,15 @@ public class MainTest {
             int rowCount = resultSet.getInt(1);
             assertEquals(8, rowCount);
         }
+
+        DatabaseMetaData metaData = connection.getMetaData();
+        try (ResultSet columns = metaData.getColumns(null, null, "tab_tb2_2", null)) {
+            int columnCount = 0;
+            while (columns.next()) {
+                columnCount++;
+            }
+            assertEquals(8, columnCount);
+        }
     }
 
     @Test
@@ -74,6 +83,15 @@ public class MainTest {
             assertTrue(resultSet.next());
             int rowCount = resultSet.getInt(1);
             assertEquals(70, rowCount);
+        }
+
+        DatabaseMetaData metaData = connection.getMetaData();
+        try (ResultSet columns = metaData.getColumns(null, null, "tab_tb2_1", null)) {
+            int columnCount = 0;
+            while (columns.next()) {
+                columnCount++;
+            }
+            assertEquals(6, columnCount);
         }
     }
 
@@ -91,6 +109,14 @@ public class MainTest {
             assertEquals(1, rowCount);
         }
 
+        DatabaseMetaData metaData = connection.getMetaData();
+        try (ResultSet columns = metaData.getColumns(null, null, "tab_t_5_c_p", null)) {
+            int columnCount = 0;
+            while (columns.next()) {
+                columnCount++;
+            }
+            assertEquals(2, columnCount);
+        }
     }
 
     @Test
@@ -107,6 +133,14 @@ public class MainTest {
             assertEquals(1, rowCount);
         }
 
+        DatabaseMetaData metaData = connection.getMetaData();
+        try (ResultSet columns = metaData.getColumns(null, null, "tab_t_5_c_s", null)) {
+            int columnCount = 0;
+            while (columns.next()) {
+                columnCount++;
+            }
+            assertEquals(2, columnCount);
+        }
     }
 
 
@@ -123,6 +157,14 @@ public class MainTest {
             assertEquals(30, rowCount);
         }
 
+        DatabaseMetaData metaData = connection.getMetaData();
+        try (ResultSet columns = metaData.getColumns(null, null, "tab_t_a_l_p_b", null)) {
+            int columnCount = 0;
+            while (columns.next()) {
+                columnCount++;
+            }
+            assertEquals(5, columnCount);
+        }
     }
 
     @Test
@@ -137,6 +179,15 @@ public class MainTest {
             assertTrue(resultSet.next());
             int rowCount = resultSet.getInt(1);
             assertEquals(30, rowCount);
+        }
+
+        DatabaseMetaData metaData = connection.getMetaData();
+        try (ResultSet columns = metaData.getColumns(null, null, "tab_t_a_l_s_b", null)) {
+            int columnCount = 0;
+            while (columns.next()) {
+                columnCount++;
+            }
+            assertEquals(5, columnCount);
         }
     }
 }
