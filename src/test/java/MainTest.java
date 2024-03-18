@@ -39,10 +39,10 @@ public class MainTest {
     }
 
     private static void insertTestData(CopyManager copyManager) throws SQLException, IOException {
-        Main.insertData("src/main/resources/csv/tab_c_gt.csv", "demo.tab_c_gt", copyManager);
-        Main.insertData("src/main/resources/csv/tab_oab.csv", "demo.tab_oab", copyManager);
-        Main.insertData("src/main/resources/csv/tab_sbfa.csv", "demo.tab_sbfa", copyManager);
-        Main.insertData("src/main/resources/csv/tab_t_5_c_c_1.csv", "demo.tab_t_5_c_c_1", copyManager);
+        Main.insertData("src/main/resources/big-csv/tab_c_gt.csv", "demo.tab_c_gt", copyManager);
+        Main.insertData("src/main/resources/big-csv/tab_oab.csv", "demo.tab_oab", copyManager);
+        Main.insertData("src/main/resources/big-csv/tab_sbfa.csv", "demo.tab_sbfa", copyManager);
+        Main.insertData("src/main/resources/big-csv/tab_t_5_c_c_1.csv", "demo.tab_t_5_c_c_1", copyManager);
     }
 
     @AfterAll
@@ -109,7 +109,7 @@ public class MainTest {
         List<String> columnNames = Arrays.asList("col_s_1", "col_o_i", "col_s_t_d", "col_s_c", "col_s_r");
 
 
-        assertRowCountAndColumnCount("tab_t_a_l_p_b", 5, 30, columnNames);
+        assertRowCountAndColumnCount("tab_t_a_l_p_b", 5, 31, columnNames);
     }
 
     @Test
@@ -121,7 +121,7 @@ public class MainTest {
         System.out.println("Duration: " + duration + "s");
         List<String> columnNames = Arrays.asList("col_s_1", "col_o_i", "col_s_t_d", "col_s_c", "col_s_r");
 
-        assertRowCountAndColumnCount("tab_t_a_l_s_b", 5, 30, columnNames);
+        assertRowCountAndColumnCount("tab_t_a_l_s_b", 5, 31, columnNames);
 
     }
 
@@ -130,15 +130,15 @@ public class MainTest {
              ResultSet resultSet = statement.executeQuery()) {
             assertTrue(resultSet.next());
             int rowCount = resultSet.getInt(1);
-            assertEquals(expectedRowCount, rowCount); // Assuming rowCount as 30 for tests
+            assertEquals(expectedRowCount, rowCount);
 
             DatabaseMetaData metaData = connection.getMetaData();
             try (ResultSet columns = metaData.getColumns(null, null, tableName, null)) {
                 int columnCount = 0;
                 while (columns.next()) {
-                    columnCount++;
                     String columnName = columns.getString("COLUMN_NAME");
-                    assertEquals(expectedColumnNames.get(columnCount - 1), columnName);
+                    assertEquals(expectedColumnNames.get(columnCount), columnName);
+                    columnCount++;
                 }
                 assertEquals(expectedColumnCount, columnCount);
             }
