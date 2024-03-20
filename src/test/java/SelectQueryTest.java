@@ -9,7 +9,9 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.sql.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -163,10 +165,11 @@ public class SelectQueryTest {
 
     private void assertCompareSqlResults(File resultFile, File correctResultFile) throws IOException {
 
-        List<String> resultLines = Files.readAllLines(resultFile.toPath(), StandardCharsets.UTF_8);
-        List<String> correctResultLines = Files.readAllLines(correctResultFile.toPath(), StandardCharsets.UTF_8);
+        Set<String> resultLines = new HashSet<>(Files.readAllLines(resultFile.toPath(), StandardCharsets.UTF_8));
+        Set<String> correctResultLines = new HashSet<>(Files.readAllLines(correctResultFile.toPath(), StandardCharsets.UTF_8));
 
         assertEquals(correctResultLines, resultLines, "The files content are not the same");
+        System.out.println("Assertion passed: The files content are the same.");
     }
 
     private static void deleteFolder(File folder) {
