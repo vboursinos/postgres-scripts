@@ -6,8 +6,9 @@ import org.postgresql.copy.CopyManager;
 import org.postgresql.core.BaseConnection;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.sql.*;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -60,66 +61,83 @@ public class SelectQueryTest {
     }
 
     @Test
-    public void testSelectCode1() throws SQLException {
+    public void testSelectCode1() throws SQLException, IOException {
         long startTime = System.currentTimeMillis();
         Main.executeScriptWriteResultFile(connection, "src/main/resources/select-sql/select-code1.sql", "src/main/resources/results/file1.txt");
         long endTime = System.currentTimeMillis();
         double duration = (endTime - startTime) / 1000.0;
         System.out.println("Duration: " + duration + "s");
-
+        File resultFile = new File("src/main/resources/results/file1.txt");
+        File correctResultFile = new File("src/main/resources/correct-results/file1.txt");
         assertRowCountAndColumnCount("src/main/resources/results/file1.txt", 6, 70);
+        assertCompareSqlResults(resultFile, correctResultFile);
     }
 
     @Test
-    public void testSelectCode2() throws SQLException {
+    public void testSelectCode2() throws SQLException, IOException {
         long startTime = System.currentTimeMillis();
         Main.executeScriptWriteResultFile(connection, "src/main/resources/select-sql/select-code2.sql", "src/main/resources/results/file2.txt");
         long endTime = System.currentTimeMillis();
         double duration = (endTime - startTime) / 1000.0;
         System.out.println("Duration: " + duration + "s");
+        File resultFile = new File("src/main/resources/results/file2.txt");
+        File correctResultFile = new File("src/main/resources/correct-results/file2.txt");
         assertRowCountAndColumnCount("src/main/resources/results/file2.txt", 8, 8);
+        assertCompareSqlResults(resultFile, correctResultFile);
     }
 
     @Test
-    public void testSelectCode4() throws SQLException {
+    public void testSelectCode4() throws SQLException, IOException {
         long startTime = System.currentTimeMillis();
         Main.executeScriptWriteResultFile(connection, "src/main/resources/select-sql/select-code4.sql", "src/main/resources/results/file4.txt");
         long endTime = System.currentTimeMillis();
         double duration = (endTime - startTime) / 1000.0;
         System.out.println("Duration: " + duration + "s");
+        File resultFile = new File("src/main/resources/results/file4.txt");
+        File correctResultFile = new File("src/main/resources/correct-results/file4.txt");
         assertRowCountAndColumnCount("src/main/resources/results/file4.txt", 2, 1);
+        assertCompareSqlResults(resultFile, correctResultFile);
     }
 
     @Test
-    public void testSelectCode5() throws SQLException {
+    public void testSelectCode5() throws SQLException, IOException {
         long startTime = System.currentTimeMillis();
         Main.executeScriptWriteResultFile(connection, "src/main/resources/select-sql/select-code5.sql", "src/main/resources/results/file5.txt");
         long endTime = System.currentTimeMillis();
         double duration = (endTime - startTime) / 1000.0;
         System.out.println("Duration: " + duration + "s");
+        File resultFile = new File("src/main/resources/results/file5.txt");
+        File correctResultFile = new File("src/main/resources/correct-results/file5.txt");
         assertRowCountAndColumnCount("src/main/resources/results/file5.txt", 2, 1);
+        assertCompareSqlResults(resultFile, correctResultFile);
     }
 
 
     @Test
-    public void testSelectCode7() throws SQLException {
+    public void testSelectCode7() throws SQLException, IOException {
         long startTime = System.currentTimeMillis();
         Main.executeScriptWriteResultFile(connection, "src/main/resources/select-sql/select-code7.sql", "src/main/resources/results/file7.txt");
         long endTime = System.currentTimeMillis();
         double duration = (endTime - startTime) / 1000.0;
         System.out.println("Duration: " + duration + "s");
+        File resultFile = new File("src/main/resources/results/file7.txt");
+        File correctResultFile = new File("src/main/resources/correct-results/file7.txt");
         assertRowCountAndColumnCount("src/main/resources/results/file7.txt", 5, 31);
+        assertCompareSqlResults(resultFile, correctResultFile);
     }
 
     @Test
-    public void testSelectCode8() throws SQLException {
+    public void testSelectCode8() throws SQLException, IOException {
         long startTime = System.currentTimeMillis();
         Main.executeScripts(connection, "src/main/resources/select-sql/", "select-code8.sql");
         Main.executeScriptWriteResultFile(connection, "src/main/resources/select-sql/select-code8.sql", "src/main/resources/results/file8.txt");
         long endTime = System.currentTimeMillis();
         double duration = (endTime - startTime) / 1000.0;
         System.out.println("Duration: " + duration + "s");
+        File resultFile = new File("src/main/resources/results/file8.txt");
+        File correctResultFile = new File("src/main/resources/correct-results/file8.txt");
         assertRowCountAndColumnCount("src/main/resources/results/file8.txt", 5, 31);
+        assertCompareSqlResults(resultFile, correctResultFile);
     }
 
     private void assertRowCountAndColumnCount(String filename, int expectedColumnCount, int expectedRowCount) throws SQLException {
@@ -141,6 +159,14 @@ public class SelectQueryTest {
         } catch (IOException e) {
             throw new SQLException("Error reading file: " + e.getMessage());
         }
+    }
+
+    private void assertCompareSqlResults(File resultFile, File correctResultFile) throws IOException {
+
+        List<String> resultLines = Files.readAllLines(resultFile.toPath(), StandardCharsets.UTF_8);
+        List<String> correctResultLines = Files.readAllLines(correctResultFile.toPath(), StandardCharsets.UTF_8);
+
+        assertEquals(correctResultLines, resultLines, "The files content are not the same");
     }
 
     private static void deleteFolder(File folder) {
