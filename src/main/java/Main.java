@@ -4,12 +4,10 @@ import org.postgresql.core.BaseConnection;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Properties;
 
 public class Main {
@@ -51,6 +49,48 @@ public class Main {
             Properties properties = new Properties();
             properties.load(fileReader);
             return properties;
+        }
+    }
+
+    public static void executeScriptWriteResultFile(Connection connection, String filePath, String outputFilePath) throws SQLException {
+        try (Statement statement = connection.createStatement();
+             BufferedReader reader = new BufferedReader(new FileReader(filePath));
+             FileWriter writer = new FileWriter(outputFilePath)) {
+
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+                stringBuilder.append("\n");
+            }
+            String[] sqlStatements = stringBuilder.toString().split(";");
+
+            for (String sql : sqlStatements) {
+                if (!sql.trim().isEmpty()) {
+                    try (ResultSet resultSet = statement.executeQuery(sql)) {
+                        ResultSetMetaData metaData = resultSet.getMetaData();
+                        int columnCount = metaData.getColumnCount();
+                        while (resultSet.next()) {
+                            for (int i = 1; i <= columnCount; i++) {
+                                String result = resultSet.getString(i);
+                                if (result == null) {
+                                    result = "NULL"; // Write empty string if result is null
+                                }
+                                writer.write(result);
+                                if (i < columnCount) {
+                                    writer.write(", "); // Separate columns with a comma
+                                }
+                            }
+                            writer.write("\n"); // Start a new line for each row
+                        }
+                    } catch (SQLException e) {
+                        // Handle any SQL exception during query execution
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } catch (IOException e) {
+            throw new SQLException("Error reading SQL script: " + e.getMessage());
         }
     }
 
